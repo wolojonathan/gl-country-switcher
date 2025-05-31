@@ -22,7 +22,7 @@ else
 fi
 
 # Step 4: Choose method
-read -p "Which method would you like to use? (1 (recommended), 2 (AX1800), 3 (GL-MT2500), 4 (GL-MT3000), 5 (DE, NOT RECOMMENDED), 6 (NOT RECOMMENDED)): " method_choice
+read -p "Which method would you like to use? (1 (recommended), 2 (AX1800), 3 (GL-MT2500), 4 (GL-MT3000), 5 (Slate 7 GL-BE3600 CN), 6 (DE, NOT RECOMMENDED), 7 (NOT RECOMMENDED)): " method_choice
 
 case $method_choice in
     1)
@@ -87,11 +87,11 @@ case $method_choice in
         fi
         ;;
     5)
-        # Method 5 steps
-        echo "WARNING: This method sets the DE country code and is NOT RECOMMENDED!"
-        read -p "Do you want to continue? (y/n): " continue_method_5
-        if [ "$continue_method_5"!= "${continue_method_5#[Yy]}" ]; then
-            echo -n "DE" | dd of=/dev/mtdblock3 bs=1 seek=136
+        # Method 4 steps
+        echo "WARNING: This method is only for GL-BE3600 (Slate 7) CN models."
+        read -p "Do you want to continue? (y/n): " continue_method_4
+        if [ "$continue_method_4"!= "${continue_method_4#[Yy]}" ]; then
+            echo -n "US" | dd of=/dev/mtdblock11 bs=1 seek=136 conv=notrunc
             sync
         else
             echo "Method 5 aborted."
@@ -99,6 +99,18 @@ case $method_choice in
         fi
         ;;
     6)
+        # Method 5 steps
+        echo "WARNING: This method sets the DE country code and is NOT RECOMMENDED!"
+        read -p "Do you want to continue? (y/n): " continue_method_5
+        if [ "$continue_method_5"!= "${continue_method_5#[Yy]}" ]; then
+            echo -n "DE" | dd of=/dev/mtdblock3 bs=1 seek=136
+            sync
+        else
+            echo "Method 6 aborted."
+            exit 1
+        fi
+        ;;
+    7)
         # Method 6 steps
         echo "WARNING: This method is NOT RECOMMENDED."
         read -p "Do you want to continue? (y/n): " continue_method_6
@@ -106,7 +118,7 @@ case $method_choice in
             echo "US" | dd of=/dev/mmcblk0p2 conv=notrunc bs=1 seek=136
             sync
         else
-            echo "Method 6 aborted."
+            echo "Method 7 aborted."
             exit 1
         fi
         ;;
